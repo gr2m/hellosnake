@@ -21,7 +21,7 @@ var grid = 32,
       2: {x:  1, y:  0}, // RIGTH
       3: {x:  0, y:  1}, // DOWN 
       4: {x: -1, y:  0}, // LEFT 
-    }
+    };
     
 // init snake parts
 for (var i=0; i < parts.length; i++) {
@@ -68,6 +68,9 @@ function turn(to)
 {
   var mapping = [LEFT, UP, RIGHT, DOWN, LEFT, UP];
   direction = mapping[direction + to];
+  
+  // hide how to
+  document.getElementById('howto').className = 'thanks'
 }
 
 setInterval(function()

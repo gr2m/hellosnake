@@ -1,20 +1,30 @@
-* {
+body {
   padding:          0;
   margin:           0;
-}
-body {
   background-color: #404040;
+  font:             1em/1.4em normal Helvetica, Arial;
 }
-canvas {
+canvas, #howto {
   width:            1024px;
   height:           768px;
   position:         absolute;
   top:              50%;
   left:             50%;
+}
+canvas {
   margin:           -384px 0 0 -512px;
   background-color: #FFF;
   
           box-shadow: 0 0 5px #000; /* Opera 10.5, IE 9.0 */
      -moz-box-shadow: 0 0 5px #000; /* FF3.5+ */
   -webkit-box-shadow: 0 0 5px #000; /* Saf3.0+, Chrome */
+}
+#howto {
+  margin:           -2384px 0 0 -502px;
+  text-shadow:      0 2000px 0 #000;
+  
+  -webkit-transition: opacity 1s linear;
+}
+#howto.thanks {
+  opacity:          0;
 }
