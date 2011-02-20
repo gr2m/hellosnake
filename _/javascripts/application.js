@@ -80,7 +80,7 @@ draw();
 
 
 // arrow keys
-function handleArrowKeys(event) {
+document.onkeyup = function(event) {
   switch(event.keyCode) {
     case 37: 
       turn(-1);
@@ -91,4 +91,9 @@ function handleArrowKeys(event) {
   }
 }
 
-document.onkeyup = handleArrowKeys;
+// click / tap
+canvas.onclick = function(event) {
+  var click_x = event.clientX-canvas.offsetLeft;
+  
+  turn( click_x > canvas.width / 2 ? 1 : -1)
+};
