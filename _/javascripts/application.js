@@ -4,7 +4,7 @@ var ctx = canvas.getContext('2d');
 var UP     = 1,
     RIGHT  = 2, 
     DOWN   = 3,
-    LEFT   = 4 
+    LEFT   = 4;
 
 // start at the bottom middle
 var grid = 32,
@@ -13,14 +13,14 @@ var grid = 32,
       x: canvas.width / 2 >> 0,
       y: canvas.height //canvas.height + grid
     },
-    length = 7;
-    parts = new Array(length);
+    length = 7,
+    parts = new Array(length),
     direction = UP,
     directions = {
       1: {x:  0, y: -1}, // UP   
       2: {x:  1, y:  0}, // RIGTH
       3: {x:  0, y:  1}, // DOWN 
-      4: {x: -1, y:  0}, // LEFT 
+      4: {x: -1, y:  0}  // LEFT 
     };
     
 // init snake parts
@@ -70,7 +70,7 @@ function turn(to)
   direction = mapping[direction + to];
   
   // hide how to
-  document.getElementById('howto').className = 'thanks'
+  document.getElementById('howto').className = 'thanks';
 }
 
 setInterval(function()
@@ -92,11 +92,11 @@ document.onkeyup = function(event) {
       turn(1);
       break;
   }
-}
+};
 
 // click / tap
 canvas.onclick = function(event) {
   var click_x = event.clientX-canvas.offsetLeft;
   
-  turn( click_x > canvas.width / 2 ? 1 : -1)
+  turn( click_x > canvas.width / 2 ? 1 : -1);
 };
