@@ -1,102 +1,94 @@
-var canvas = document.getElementsByTagName('canvas')[0];
-var ctx = canvas.getContext('2d');
+var grid   = 32,
+    width  = Math.ceil(window.innerWidth / grid),
+    height = Math.ceil(window.innerHeight / grid),
+    mod_x  = window.innerWidth % grid,
+    mod_y  = window.innerHeight % grid;
 
-var UP     = 1,
-    RIGHT  = 2, 
-    DOWN   = 3,
-    LEFT   = 4;
+if (mod_x == 0) width++;
+if (mod_y == 0) height++;
 
-// start at the bottom middle
-var grid = 32,
-    interval = 300, // in between a move, in milliseconds
-    position = {
-      x: canvas.width / 2 >> 0,
-      y: canvas.height //canvas.height + grid
-    },
-    length = 7,
-    parts = new Array(length),
-    direction = UP,
-    directions = {
-      1: {x:  0, y: -1}, // UP   
-      2: {x:  1, y:  0}, // RIGTH
-      3: {x:  0, y:  1}, // DOWN 
-      4: {x: -1, y:  0}  // LEFT 
-    };
-    
-// init snake parts
-for (var i=0; i < parts.length; i++) {
-  parts[i] = {
-    x         : position.x - directions[direction].x * i * grid,
-    y         : position.y - directions[direction].y * i * grid,
-    color     : '#000',
-    direction : direction
+var offset_x = (grid - mod_x) / -2,
+    offset_y = (grid - mod_y) / -2;    
+
+// create playfield
+document.body.style.backgroundPosition = offset_x + 'px ' + offset_y + 'px';
+
+World = document.getElementById('world');
+World.style.left = (width / 2 >> 0) * grid + offset_x + 'px'
+World.style.top = (height / 2 >> 0) * grid + offset_y + 'px'
+
+var BodyPart = function(x, y) {
+  var _element = document.createElement('div');
+      
+  this.move = function(x, y) {
+    _element.style.left   = x * grid + 'px';
+    _element.style.top    = y * grid + 'px';
   };
+      
+  // INIT
+  this.move(x, y);
+  _element.className = 'body';
+  _element.style.width  = grid + 'px';
+  _element.style.height = grid + 'px';
+  
+  World.appendChild(_element);
 };
-// head
-parts[0].color = '#c00';
 
-function draw()
+// var World = function(width, height, offset_x, offset_y) {
+//   var _element  = document.createElement('div'),
+//       taken_pos = {};
+//   
+//   // INIT
+//   _element.style.left = (width / 2 >> 0) * grid + offset_x + 'px'
+//   _element.style.top = (height / 2 >> 0) * grid + offset_y + 'px'
+// };
+
+
+
+var body_parts = [];
+
+var Snake = new Snake({
+  onNewPart  : function(x, y) {
+    body_parts.push(new BodyPart(x, y))
+  },
+  onPartMove : function(i, x, y) {
+    if (i == 0) {
+      // head
+      
+    }
+    body_parts[i].move(x,y)
+  },
+  onCollision : function() {
+    alert('Game Over!');
+    clearInterval(theBeat);
+  }
+});
+
+var theBeat = setInterval(function()
 {
-  // clear with blur effect
-  ctx.fillStyle='rgba(255,255,255,0.5)';
-  ctx.fillRect(0,0,canvas.width, canvas.height);
- 
-  for (var i=0; i < parts.length; i++) {
-    ctx.fillStyle = parts[i].color;
-    ctx.fillRect(parts[i].x,parts[i].y,grid,grid);
-  };
-}
-
-function move()
-{
-  // inherit direction from part before
-  for (var i = parts.length - 1; i > 0; i--){
-    parts[i].direction = parts[i-1].direction;
-  };
-  
-  // move head in current direction
-  parts[0].direction = direction;
-  
-  // apply move
-  for (var i=0; i < parts.length; i++) {
-    parts[i].x += directions[parts[i].direction].x * grid;
-    parts[i].y += directions[parts[i].direction].y * grid;
-  };
-}
-
-function turn(to) 
-{
-  var mapping = [LEFT, UP, RIGHT, DOWN, LEFT, UP];
-  direction = mapping[direction + to];
-  
-  // hide how to
-  document.getElementById('howto').className = 'thanks';
-}
-
-setInterval(function()
-{
-  move();
-  draw();
-},interval);
-
-draw();
+  Snake.move();
+}, 300);
 
 
 // arrow keys
-document.onkeyup = function(event) {
+document.onkeydown = function(event) {
   switch(event.keyCode) {
     case 37: 
-      turn(-1);
+      Snake.turnLeft();
+      break;
+    case 38: 
+      Snake.addNewPart();
       break;
     case 39: 
-      turn(1);
+      Snake.turnRight();
       break;
+    default:
+      clearInterval(theBeat);
   }
 };
 
 // click / tap
-canvas.onclick = function(event) {
-  var click_x = event.clientX-canvas.offsetLeft;
-  
-  turn( click_x > canvas.width / 2 ? 1 : -1);
+World.onclick = function(event) {
+  var click_x = event.clientX-World.offsetLeft;
+  click_x > window.innerWidth / 2 ? Snake.turnLeft() : Snake.turnRight();
 };

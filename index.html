@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html manifest="hellosnake.manifest"> 
 <head>
+  <meta charset="utf-8">
   <title>Hello, Snake!</title>
   <meta name="author" content="Greger Martynus" />
   <meta name="Content-Script-Type" content="text/javascript" />
@@ -15,16 +16,20 @@
   <link rel="stylesheet" href="_/stylesheets/application.css" />
 </head>
 <body>
-  <canvas width="1024" height="768">This demo requires a browser that supports Canvas.</canvas>
-  <div id="howto">
-    <p>Click/Tap on left/right side of the screen
-    or use left/right arrows to turn the snake. </p>
+  <div id="world">
+  </div><!-- /world -->
+  
+  <!--
+    <div id="howto">
+      <p>Click/Tap on left/right side of the screen
+      or use left/right arrows to turn the snake. </p>
 
-    <p>iPad users:<br />
-    Add to homescreen for best experience.</p>
+      <p>iPad users:<br />
+      Add to homescreen for best experience.</p>
 
-    <p>Get updates on twitter.com/hellosnake</p>
-  </div><!-- /howto -->
-  <script src="_/javascripts/application.js"></script>
+      <p>Get updates on twitter.com/hellosnake</p>
+    </div> -->
+  <script src="_/javascripts/snake.js"></script>
+  <script src="_/javascripts/application.js"></script
 </body>
 </html>

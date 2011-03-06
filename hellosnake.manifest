@@ -3,5 +3,9 @@ CACHE MANIFEST
 index.html
 _/images/icon.png
 _/images/startup.png
+_/images/grid_s.png
+_/images/grid_m.png
+_/images/grid_l.png
+_/javascripts/snake.js
 _/javascripts/application.js
 _/stylesheets/application.css
