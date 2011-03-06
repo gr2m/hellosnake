@@ -88,7 +88,14 @@ document.onkeydown = function(event) {
 };
 
 // click / tap
-World.onclick = function(event) {
-  var click_x = event.clientX-World.offsetLeft;
-  click_x > window.innerWidth / 2 ? Snake.turnLeft() : Snake.turnRight();
+
+document.body.ontouchstart = function(event) {
+  var touch = event.touches[0];
+  touch.pageX < window.innerWidth / 2 ? Snake.turnLeft() : Snake.turnRight();
+  return false;
+};
+
+document.body.onmousedown = function(event) {
+  event.clientX < window.innerWidth / 2 ? Snake.turnLeft() : Snake.turnRight();
+  return false;
 };
