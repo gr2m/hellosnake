@@ -17,62 +17,60 @@ var offset_x = (grid - mod_x) / -2,
 document.body.style.backgroundPosition = offset_x + 'px ' + offset_y + 'px';
 
 World = document.getElementById('world');
-var Mirrors = [
-  [ 0, 0], // CENTER
-  [ 0,-1], // TOP
-  [ 1,-1], // TOP LEFT
-  [ 1, 0], // RIGHT
-  [ 1, 1], // RIGHT BOTTOM
-  [ 0, 1], // BOTTOM
-  [-1, 1], // BOTTOM LEFT
-  [-1, 0], // LEFT
-  [-1,-1]  // TOP LEFT
-]
-for (var i=0; i < Mirrors.length; i++) {
-  var shift = Mirrors[i];
-  Mirrors[i] = document.createElement('div');
-  Mirrors[i].className = 'view';
-  Mirrors[i].style.left = (center_x + shift[0] * (width)  * grid) + 'px';
-  Mirrors[i].style.top  = (center_y + shift[1] * (height) * grid) + 'px';
-  World.appendChild(Mirrors[i]);
-};
+World.style.left = center_x + 'px';
+World.style.top  = center_y + 'px';
 
 
+var body_parts = [];
 var BodyPart = function(x, y) {
-  var self = this, _elements = new Array(Mirrors.length);
+  var self = this, _element, _dir;
   
-  this.move = function(x, y) {
+  this.move = function(x, y, dir) {
+    _element.style.left = x * grid + 'px';
+    _element.style.top  = y * grid + 'px';
+    _element.className = 'body dir_' + dir;
     
-    if (self == body_parts[0]) {
-      console.log(theApple.x, x, x % width  , x % width  + width,  x % width  + width)
-      console.log(theApple.y, y, y % height , y % height + height, y % height + height)
+    if (self == body_parts[0]) _head_move(x,y, dir);
+  };
+  
+  var _head_move = function(x,y, dir) {
+    if ( typeof _dir == 'undefined' ) {
+      _dir = dir;
+    } else if (_dir != dir ) {
+      
+      switch((_dir - dir) % 4) {
+        case -1: 
+        case 3:
+          _dir++; 
+          break;
+        case 1:
+        case -3:
+          _dir--; 
+          break;
+      }
+      _element.style.webkitTransform = 'rotate('+(_dir - 1)*90+'deg)';
     }
     
-    if ((x % width  == theApple.x || x % width + width == theApple.x   || x % width - width == theApple.x) &&
-        (y % height == theApple.y || y % height + height == theApple.y || y % height - height == theApple.y)) {
+    if (x == theApple.x && y == theApple.y) {
       theApple.create();
       theSnake.addNewPart();
     }
     
-    World.style.top  = height * grid * (-y / height >> 0) + 'px'
-    World.style.left = width  * grid * (-x / width  >> 0) + 'px'
+    World.style.left = center_x - x * grid + 'px';
+    World.style.top  = center_y - y * grid + 'px';
     
-    for (var i=0; i < _elements.length; i++) {
-      _elements[i].style.left = x * grid + 'px';
-      _elements[i].style.top  = y * grid + 'px';
-    };
+    document.body.style.backgroundPosition = (offset_x - x * grid) + 'px ' + (offset_y - y * grid) + 'px';
   };
       
   // INIT
-  for (var i=0; i < _elements.length; i++) {
-    _elements[i] = document.createElement('div');
-    _elements[i].className = 'body';
-    _elements[i].style.width  = grid + 'px';
-    _elements[i].style.height = grid + 'px';
-    Mirrors[i].appendChild(_elements[i]);
-  };
+  _element = document.createElement('div');
+  _element.className = 'body';
+  _element.style.width  = grid + 'px';
+  _element.style.height = grid + 'px';
+  _element.style.zIndex = 100000000 - body_parts.length;
+  SnakeContainer.appendChild(_element);
   
-  this.move(x, y);
+  this.move(x, y, 0);
 };
 
 var Fruit = function() {
@@ -86,40 +84,35 @@ var Fruit = function() {
     _element.style.top  = self.y * grid + 'px';
   };
   
-  Fruits = document.getElementById('fruits');
-  Fruits.style.left = center_x + 'px';
-  Fruits.style.top  = center_y + 'px';
   
   _element.className    = 'fruit';
   _element.style.width  = grid + 'px';
   _element.style.height = grid + 'px';
-  Fruits.appendChild(_element);
+  World.appendChild(_element);
   
   this.create();
 };
 
-var theApple = new Fruit();
-
-var body_parts = [];
-
+SnakeContainer = document.getElementById('snake');
 var theSnake = new Snake({
   onNewPart  : function(x, y) {
     body_parts.push(new BodyPart(x, y))
   },
-  onPartMove : function(i, x, y) {
-    body_parts[i].move(x,y)
+  onPartMove : function(i, x, y, direction) {
+    body_parts[i].move(x,y, direction)
   },
   onCollision : function() {
     alert('Game Over!');
     clearInterval(theBeat);
   }
 });
+var theApple = new Fruit();
 
 start = function() {
   theBeat = setInterval(function()
   {
     theSnake.move();
-  }, 100);
+  }, 300);
 };
 stop = function() {
   clearInterval(theBeat);
