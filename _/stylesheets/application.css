@@ -1,10 +1,35 @@
-body {
+body, html {
   padding:          0;
   margin:           0;
-  background-color: #404040;
-  font:             1em/1.4em normal Helvetica, Arial;
+  height:           100%;
+  overflow:         hidden;
+  
+  background:       #000 url(../images/grid_m.png);
 }
-canvas, #howto {
+
+#world {
+  position:         absolute;
+}
+
+.body {
+  background-color: #2592E1;
+  position:         absolute;
+  z-index:          1;
+ 
+         box-shadow: 0 0 3px rgba(0,0,0,0.5); /* Opera 10.5, IE 9.0 */
+    -moz-box-shadow: 0 0 3px rgba(0,0,0,0.5); /* FF3.5+ */
+ -webkit-box-shadow: 0 0 3px rgba(0,0,0,0.5); /* Saf3.0+, Chrome */
+  
+}
+/* head */
+.body:first-child { 
+  z-index:          2;
+  background-color: #FF8215;
+}
+
+
+
+/*canvas, #howto {
   width:            1024px;
   height:           768px;
   position:         absolute;
@@ -15,9 +40,9 @@ canvas {
   margin:           -384px 0 0 -512px;
   background-color: #FFF;
   
-          box-shadow: 0 0 5px #000; /* Opera 10.5, IE 9.0 */
-     -moz-box-shadow: 0 0 5px #000; /* FF3.5+ */
-  -webkit-box-shadow: 0 0 5px #000; /* Saf3.0+, Chrome */
+          box-shadow: 0 0 5px #000; 
+     -moz-box-shadow: 0 0 5px #000; 
+  -webkit-box-shadow: 0 0 5px #000; 
 }
 #howto {
   margin:           -2384px 0 0 -502px;
@@ -27,4 +52,4 @@ canvas {
 }
 #howto.thanks {
   opacity:          0;
-}
+}*/
