@@ -7,7 +7,7 @@ body, html {
   background:       #000 url(../images/grid_m.png);
 }
 
-#world {
+.view {
   position:         absolute;
 }
 
@@ -26,30 +26,3 @@ body, html {
   z-index:          2;
   background-color: #FF8215;
 }
-
-
-
-/*canvas, #howto {
-  width:            1024px;
-  height:           768px;
-  position:         absolute;
-  top:              50%;
-  left:             50%;
-}
-canvas {
-  margin:           -384px 0 0 -512px;
-  background-color: #FFF;
-  
-          box-shadow: 0 0 5px #000; 
-     -moz-box-shadow: 0 0 5px #000; 
-  -webkit-box-shadow: 0 0 5px #000; 
-}
-#howto {
-  margin:           -2384px 0 0 -502px;
-  text-shadow:      0 2000px 0 #000;
-  
-  -webkit-transition: opacity 1s linear;
-}
-#howto.thanks {
-  opacity:          0;
-}*/
