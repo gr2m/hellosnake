@@ -18,7 +18,7 @@ var Snake = function(options) {
   
   // DEFAULTS
   var _defaults = {
-    length    : 3,
+    length    : 4,
     direction : UP
   };
   

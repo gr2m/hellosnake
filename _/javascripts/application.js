@@ -1,4 +1,5 @@
 var grid   = 32,
+    speed  = 150,
     width  = Math.ceil(window.innerWidth / grid),
     height = Math.ceil(window.innerHeight / grid),
     mod_x  = window.innerWidth % grid,
@@ -112,7 +113,7 @@ start = function() {
   theBeat = setInterval(function()
   {
     theSnake.move();
-  }, 200);
+  }, speed);
 };
 stop = function() {
   clearInterval(theBeat);
