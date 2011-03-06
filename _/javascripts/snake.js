@@ -37,8 +37,6 @@ var Snake = function(options) {
       _parts[i].y += DIRECTIONS[_parts[i].direction].y;
       _onPartMove(i, _parts[i].x, _parts[i].y);
       
-      if ( i == 0) console.log(_taken_pos, _parts[i].x, _parts[i].y)
-      
       if ( i == 0 && this.isPosTaken(_parts[i].x, _parts[i].y) ) _game_over = true;
       _flagAsTaken(_parts[i].x,_parts[i].y)
     };
