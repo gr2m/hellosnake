@@ -16,6 +16,7 @@ var offset_x = (grid - mod_x) / -2,
 // create playfield
 document.body.style.backgroundPosition = offset_x + 'px ' + offset_y + 'px';
 
+World = document.getElementById('world');
 var Mirrors = [
   [ 0, 0], // CENTER
   [ 0,-1], // TOP
@@ -33,17 +34,28 @@ for (var i=0; i < Mirrors.length; i++) {
   Mirrors[i].className = 'view';
   Mirrors[i].style.left = (center_x + shift[0] * (width)  * grid) + 'px';
   Mirrors[i].style.top  = (center_y + shift[1] * (height) * grid) + 'px';
-  document.body.appendChild(Mirrors[i]);
+  World.appendChild(Mirrors[i]);
 };
-
-World = document.getElementById('world');
 
 
 var BodyPart = function(x, y) {
-  var _elements = new Array(Mirrors.length);
+  var self = this, _elements = new Array(Mirrors.length);
   
   this.move = function(x, y) {
-    console.log([x,y].join(','), height, (height / 2) - 1)
+    
+    if (self == body_parts[0]) {
+      console.log(theApple.x, x, x % width  , x % width  + width,  x % width  + width)
+      console.log(theApple.y, y, y % height , y % height + height, y % height + height)
+    }
+    
+    if ((x % width  == theApple.x || x % width + width == theApple.x   || x % width - width == theApple.x) &&
+        (y % height == theApple.y || y % height + height == theApple.y || y % height - height == theApple.y)) {
+      theApple.create();
+      theSnake.addNewPart();
+    }
+    
+    World.style.top  = height * grid * (-y / height >> 0) + 'px'
+    World.style.left = width  * grid * (-x / width  >> 0) + 'px'
     
     for (var i=0; i < _elements.length; i++) {
       _elements[i].style.left = x * grid + 'px';
@@ -63,9 +75,34 @@ var BodyPart = function(x, y) {
   this.move(x, y);
 };
 
+var Fruit = function() {
+  var self     = this,
+      _element = document.createElement('div');
+  this.create = function() {
+    self.x = (Math.random() * (width - 2)  >> 0) + 1 - (width  / 2 >> 0),
+    self.y = (Math.random() * (height - 2) >> 0) + 1 - (height / 2 >> 0);
+        
+    _element.style.left = self.x * grid + 'px';
+    _element.style.top  = self.y * grid + 'px';
+  };
+  
+  Fruits = document.getElementById('fruits');
+  Fruits.style.left = center_x + 'px';
+  Fruits.style.top  = center_y + 'px';
+  
+  _element.className    = 'fruit';
+  _element.style.width  = grid + 'px';
+  _element.style.height = grid + 'px';
+  Fruits.appendChild(_element);
+  
+  this.create();
+};
+
+var theApple = new Fruit();
+
 var body_parts = [];
 
-var Snake = new Snake({
+var theSnake = new Snake({
   onNewPart  : function(x, y) {
     body_parts.push(new BodyPart(x, y))
   },
@@ -81,8 +118,8 @@ var Snake = new Snake({
 start = function() {
   theBeat = setInterval(function()
   {
-    Snake.move();
-  }, 300);
+    theSnake.move();
+  }, 100);
 };
 stop = function() {
   clearInterval(theBeat);
@@ -91,22 +128,24 @@ stop = function() {
 start();
 
 
+
+
 // KEYBOARD NAVIGATION
 document.onkeydown = function(event) {
   switch (event.keyCode){
-    case 37: Snake.turnLeft(); break;
-    case 39: Snake.turnRight(); break;
+    case 37: theSnake.turnLeft(); break;
+    case 39: theSnake.turnRight(); break;
     default: theBeat ? stop() : start();
   }[];
 };
 
 // CLICK / TAB NAVIGATI
 document.body.onmousedown = function(event) {
-  event.clientX < window.innerWidth / 2 ? Snake.turnLeft() : Snake.turnRight();
+  event.clientX < window.innerWidth / 2 ? theSnake.turnLeft() : theSnake.turnRight();
   return false;
 };
 document.body.ontouchstart = function(event) {
   var touch = event.touches[0];
-  touch.pageX < window.innerWidth / 2 ? Snake.turnLeft() : Snake.turnRight();
+  touch.pageX < window.innerWidth / 2 ? theSnake.turnLeft() : theSnake.turnRight();
   return false;
 };
