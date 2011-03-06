@@ -9,11 +9,11 @@ var Snake = function(options) {
       LEFT   = 4,
       
       DIRECTIONS = {
-        0: {x:  0, y:  0}, // STOP   
-        1: {x:  0, y: -1}, // UP   
-        2: {x:  1, y:  0}, // RIGTH
-        3: {x:  0, y:  1}, // DOWN 
-        4: {x: -1, y:  0}  // LEFT 
+        0: {x:  0, y:  0}, // STOP
+        1: {x:  0, y: -1}, // UP
+        2: {x:  1, y:  0}, // RIGHT
+        3: {x:  0, y:  1}, // DOWN
+        4: {x: -1, y:  0}  // LEFT
       };
   
   // DEFAULTS
@@ -35,13 +35,17 @@ var Snake = function(options) {
       _flagAsFree(_parts[i].x,_parts[i].y)
       _parts[i].x += DIRECTIONS[_parts[i].direction].x;
       _parts[i].y += DIRECTIONS[_parts[i].direction].y;
-      _onPartMove(i, _parts[i].x, _parts[i].y);
+      _onPartMove(i, _parts[i].x, _parts[i].y, _parts[i].direction);
       
-      if ( i == 0 && this.isPosTaken(_parts[i].x, _parts[i].y) ) _game_over = true;
-      _flagAsTaken(_parts[i].x,_parts[i].y)
+      if ( i > 0 && _parts[i].direction) _flagAsTaken(_parts[i].x,_parts[i].y)
     };
     
-    if (_game_over) _onCollision();
+    if ( this.isPosTaken(_head.x, _head.y) ) {
+      _onCollision()
+    } else {
+      _flagAsTaken(_head.x, _head.y)
+    }
+    
 
     // inherit direction from part before
     for (var i = _parts.length - 1; i > 0; i--){
@@ -86,7 +90,6 @@ var Snake = function(options) {
       _parts       = [_head],
       _turn_queue  = [],
       _taken_pos   = {},
-      _game_over   = false,
       _do_nothing  = function() {},
       
       _onNewPart   = options.onNewPart   || nada,
