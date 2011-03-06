@@ -112,7 +112,7 @@ start = function() {
   theBeat = setInterval(function()
   {
     theSnake.move();
-  }, 300);
+  }, 200);
 };
 stop = function() {
   clearInterval(theBeat);
