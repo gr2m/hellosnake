@@ -15,11 +15,37 @@ var offset_x = (grid - mod_x) / -2,
 
 
 // create playfield
-document.body.style.backgroundPosition = offset_x + 'px ' + offset_y + 'px';
-
 World = document.getElementById('world');
-World.style.left = center_x + 'px';
-World.style.top  = center_y + 'px';
+
+var levelContainer = document.getElementById('level');
+
+theLevel = new Level({
+  draw_free_block : function(x,y) {
+    var _element = document.createElement('div');
+    _element.className = 'block';
+    _element.style.width  = grid + 'px';
+    _element.style.height = grid + 'px';
+    _element.style.left   = x * grid + 'px';
+    _element.style.top    = y * grid + 'px';
+    _element.style.backgroundColor = 'RGBa(255,255,255,.1'+(Math.random() * 3 >> 0)+')';
+    
+    levelContainer.appendChild(_element)
+  },
+  draw_taken_block : function(x,y) {
+    var _element = document.createElement('div');
+    _element.className = 'taken block';
+    _element.style.width  = grid + 'px';
+    _element.style.height = grid + 'px';
+    _element.style.left   = x * grid + 'px';
+    _element.style.top    = y * grid + 'px';
+    _element.style.backgroundColor = 'RGBa(255,255,255,.8'+(Math.random() * 3 >> 0)+')';
+    
+    levelContainer.appendChild(_element)
+  }
+});
+World.style.left = center_x - theLevel.startPosition().x * grid + 'px';
+World.style.top  = center_y - theLevel.startPosition().y * grid + 'px';
+
 
 
 var body_parts = [];
@@ -35,6 +61,12 @@ var BodyPart = function(x, y) {
   };
   
   var _head_move = function(x,y, dir) {
+    
+    if (! theLevel.isFree(x,y)) {
+      theSnake.die();
+    }
+    
+    
     if ( typeof _dir == 'undefined' ) {
       _dir = dir;
     } else if (_dir != dir ) {
@@ -59,8 +91,6 @@ var BodyPart = function(x, y) {
     
     World.style.left = center_x - x * grid + 'px';
     World.style.top  = center_y - y * grid + 'px';
-    
-    document.body.style.backgroundPosition = (offset_x - x * grid) + 'px ' + (offset_y - y * grid) + 'px';
   };
       
   // INIT
@@ -78,11 +108,15 @@ var Fruit = function() {
   var self     = this,
       _element = document.createElement('div');
   this.create = function() {
-    self.x = (Math.random() * (width - 2)  >> 0) + 1 - (width  / 2 >> 0),
-    self.y = (Math.random() * (height - 2) >> 0) + 1 - (height / 2 >> 0);
-        
-    _element.style.left = self.x * grid + 'px';
-    _element.style.top  = self.y * grid + 'px';
+    self.x = (Math.random() * 12 >> 0) + 1;
+    self.y = (Math.random() * 12 >> 0) + 1;
+    
+    if (theLevel.isFree(self.x, self.y) && ! theSnake.isPosTaken(self.x, self.y)) {
+      _element.style.left = self.x * grid + 'px';
+      _element.style.top  = self.y * grid + 'px';
+    } else {
+      this.create();
+    }
   };
   
   
@@ -95,7 +129,7 @@ var Fruit = function() {
 };
 
 SnakeContainer = document.getElementById('snake');
-var theSnake = new Snake({
+var theSnake = new Snake(theLevel.startPosition(), {
   onNewPart  : function(x, y) {
     body_parts.push(new BodyPart(x, y))
   },
@@ -122,6 +156,25 @@ stop = function() {
 start();
 
 
+var style_element;
+function set_speed(interval) {
+  var css = '#world, .body{-webkit-transition: all '+interval/1000+'s linear;}';
+  
+  if(style_element) {
+		style_element.replaceChild(document.createTextNode(css), style_element.firstChild);
+	} else {
+		style_element = document.createElement("style");
+		style_element.type = "text/css";
+		style_element.appendChild(document.createTextNode(css));
+		console.log(css)
+		
+		document.getElementsByTagName("head")[0].appendChild(style_element);
+	}
+} // set_speed(interval)
+
+setTimeout(function() {
+  set_speed(speed);
+}, 10);
 
 
 // KEYBOARD NAVIGATION

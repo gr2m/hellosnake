@@ -4,15 +4,11 @@ body {
   height:           100%;
   overflow:         hidden;
   
-  background:       #000 url(../images/grid.png);
-  
-  -webkit-transition: background-position .15s linear;
+  background:       #000;
 }
 
 #world {
   position:         absolute;
-  
-  -webkit-transition: all .15s linear;
 }
 #snake {
   position:         absolute;
@@ -27,9 +23,6 @@ body {
  
   -webkit-box-shadow: 0 0 1px rgba(0,0,0,0.5); /* Saf3.0+, Chrome */
   -webkit-border-radius: 3px;
-   
-  -webkit-transition: all .15s linear;
-  
 }
 
 .body.dir_0 { /*stop*/
@@ -171,4 +164,18 @@ body {
 .body:first-child:before,
 .body:first-child:after {
   display:          none;
+}
+
+
+#level {
+  position:         absolute;
+}
+
+.block {
+  position:         absolute;
+}
+.block.taken {
+          box-shadow: 1px 1px 3px #000; /* Opera 10.5, IE 9.0 */
+     -moz-box-shadow: 1px 1px 3px #000; /* FF3.5+ */
+  -webkit-box-shadow: 1px 1px 3px #000; /* Saf3.0+, Chrome */
 }
