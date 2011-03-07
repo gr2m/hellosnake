@@ -1,4 +1,4 @@
-var Snake = function(options) {
+var Snake = function(start, options) {
   options = options || {};
   
   // CONSTANTS
@@ -82,11 +82,15 @@ var Snake = function(options) {
   this.isPosTaken = function(x, y) {
     return _taken_pos[ [x,y].join(',') ];
   };
+  
+  this.die = function() {
+    _onCollision();
+  };
 
   // PRIVATE
-  var _direction   = options.direction || _defaults.direction,
+  var _direction   = start.direction   || _defaults.direction,
       _init_length = options.length    || _defaults.length,
-      _head        = {x:0,y:0,direction: _direction},
+      _head        = {x: start.x,y:start.y,direction: _direction},
       _parts       = [_head],
       _turn_queue  = [],
       _taken_pos   = {},
